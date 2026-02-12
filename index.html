@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Siddhi Salian Will You Be My Valentine? ❤️</title>
+<title>Will You Be My Valentine? ❤️</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -53,7 +53,6 @@ button {
 #noBtn {
     background-color: #444;
     color: white;
-    position: absolute;
 }
 
 .hidden {
@@ -95,33 +94,32 @@ const celebrationPage = document.getElementById("celebrationPage");
 let noScale = 1;
 let yesScale = 1;
 
-// Starting position
-noBtn.style.left = "60%";
-noBtn.style.top = "55%";
+const messages = [
+    "Are you sure? 😢",
+    "Think again...",
+    "That hurts 😭",
+    "Last chance...",
+    "You don’t mean that 😔"
+];
 
-function moveButton() {
-    const padding = 20;
-    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+// When NO is clicked
+noBtn.addEventListener("click", () => {
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-
-    // Shrink NO button
-    noScale -= 0.1;
-    if (noScale < 0.4) noScale = 0.4;
+    // Shrink NO
+    noScale -= 0.15;
+    if (noScale < 0.2) noScale = 0.2;
     noBtn.style.transform = `scale(${noScale})`;
 
-    // Grow YES button
-    yesScale += 0.1;
+    // Grow YES
+    yesScale += 0.15;
     yesBtn.style.transform = `scale(${yesScale})`;
-}
 
-noBtn.addEventListener("mouseenter", moveButton);
+    // Show playful message
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    alert(randomMessage);
+});
 
+// YES button
 yesBtn.addEventListener("click", () => {
     mainContent.style.display = "none";
     celebrationPage.classList.remove("hidden");
