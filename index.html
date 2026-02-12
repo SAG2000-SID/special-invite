@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,97 +8,82 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-    body {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #ff9a9e, #fecfef);
-        overflow: hidden;
-        text-align: center;
-    }
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    overflow: hidden;
+    text-align: center;
+}
 
-    .container {
-        position: relative;
-    }
+.container {
+    position: relative;
+}
 
-    h1 {
-        font-size: 2.5rem;
-        margin-bottom: 30px;
-        color: #fff;
-    }
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: white;
+}
 
-    button {
-        padding: 12px 25px;
-        margin: 10px;
-        font-size: 18px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.3s ease;
-        position: relative;
-    }
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-    #yesBtn {
-        background-color: #ff4d6d;
-        color: white;
-    }
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
 
-    #yesBtn:hover {
-        transform: scale(1.1);
-    }
+#noBtn {
+    background-color: #444;
+    color: white;
+    position: absolute;
+}
 
-    #noBtn {
-        background-color: #444;
-        color: white;
-        position: absolute;
-    }
+.hidden {
+    display: none;
+}
 
-    .hidden {
-        display: none;
-    }
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp 4s linear forwards;
+}
 
-    .celebration {
-        animation: fadeIn 1s ease forwards;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .heart {
-        position: absolute;
-        color: red;
-        font-size: 20px;
-        animation: floatUp 4s linear infinite;
-    }
-
-    @keyframes floatUp {
-        0% { transform: translateY(100vh); opacity: 1; }
-        100% { transform: translateY(-10vh); opacity: 0; }
-    }
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+}
 </style>
 </head>
 
 <body>
 
 <div class="container" id="mainContent">
-    <h1>Siddhi Salian Will you be my Valentine? ❤️</h1>
+    <h1>Will you be my Valentine? ❤️</h1>
     <button id="yesBtn">Yes 💖</button>
     <button id="noBtn">No 😢</button>
 </div>
 
 <div id="celebrationPage" class="hidden">
-    <h1 class="celebration">YAYYYY!!! 💕 I love you!!</h1>
-    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Valentine GIF" width="300">
+    <h1>YAYYYY!!! 💕 I love you!!</h1>
+    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" width="300">
 </div>
 
 <script>
@@ -108,30 +92,38 @@ const yesBtn = document.getElementById("yesBtn");
 const mainContent = document.getElementById("mainContent");
 const celebrationPage = document.getElementById("celebrationPage");
 
-const messages = [
-    "Really? 😭",
-    "Wrong answer!",
-    "Try again 😌",
-    "That’s illegal 🚫",
-    "You sure about that? 🤨"
-];
+let noScale = 1;
+let yesScale = 1;
+
+// Starting position
+noBtn.style.left = "60%";
+noBtn.style.top = "55%";
 
 function moveButton() {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    // Shrink NO button
+    noScale -= 0.1;
+    if (noScale < 0.4) noScale = 0.4;
+    noBtn.style.transform = `scale(${noScale})`;
+
+    // Grow YES button
+    yesScale += 0.1;
+    yesBtn.style.transform = `scale(${yesScale})`;
 }
 
-noBtn.addEventListener("mouseover", moveButton);
-
-noBtn.addEventListener("click", () => {
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-    alert(randomMessage);
-});
+noBtn.addEventListener("mouseenter", moveButton);
 
 yesBtn.addEventListener("click", () => {
-    mainContent.classList.add("hidden");
+    mainContent.style.display = "none";
     celebrationPage.classList.remove("hidden");
     startHearts();
 });
@@ -142,7 +134,8 @@ function startHearts() {
         heart.classList.add("heart");
         heart.innerHTML = "❤️";
         heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+        heart.style.bottom = "0px";
+        heart.style.fontSize = (Math.random() * 20 + 15) + "px";
         document.body.appendChild(heart);
 
         setTimeout(() => {
